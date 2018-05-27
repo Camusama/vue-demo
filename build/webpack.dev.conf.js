@@ -10,6 +10,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
+
+
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
@@ -92,4 +94,14 @@ module.exports = new Promise((resolve, reject) => {
       resolve(devWebpackConfig)
     }
   })
+})
+const jsonServer = require('json-server')
+const apiServer = jsonServer.create()
+const apiRouter = jsonServer.router('db.json')
+const middlewares = jsonServer.defaults()
+
+apiServer.use(middlewares)
+apiServer.use('/api',apiRouter)
+apiServer.listen(8081, () => {
+  console.log('JSON Server is running')
 })

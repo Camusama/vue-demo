@@ -5,11 +5,11 @@
         <img src="../assets/logo.png">
         <div class="head-nav">
           <ul class="nav-list">
-            <li>登录</li>
+            <li @click="logClick">登录</li>
             <li class="nav-pile">|</li>
-            <li>注册</li>
+            <li @click="regClick">注册</li>
             <li class="nav-pile">|</li>
-            <li>关于</li>
+            <li @click="aboutClick">关于</li>
           </ul>
         </div>
       </div>
@@ -20,14 +20,49 @@
     <div class="app-foot">
        <p>@ 2018 YTB Vuejs DEMO</p>
     </div>
+    <my-dialog :isShow="isShowAboutDialog" @on-close ="closeClick">
+       <p>这是我的第一个vue.js框架的demo。我爱vue框架</p>
+    </my-dialog>
+    <my-dialog :isShow="isShowLogDialog" @on-close ="closeClick">
+       <log-form></log-form>
+    </my-dialog>
+    <my-dialog :isShow="isShowRegDialog" @on-close ="closeClick">
+       <reg-form></reg-form>
+    </my-dialog>
   </div>
 </template>
 
 <script>
+import Dialog from './base/dialog'
+import LogForm from './logForm.vue'
+import RegFrom from './regForm.vue'
 export default {
+  components:{
+    MyDialog:Dialog,
+    LogForm:LogForm,
+    RegFrom:RegFrom
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      isShowAboutDialog:false,
+      isShowLogDialog:false,
+      isShowRegDialog:false
+    }
+  },
+  methods:{
+    aboutClick(){
+      this.isShowAboutDialog = true
+    },
+    closeClick(){
+      this.isShowAboutDialog = false
+      this.isShowLogDialog =false,
+      this.isShowRegDialog =false
+    },
+    regClick(){
+      this.isShowRegDialog = true
+    },
+    logClick(){
+      this.isShowLogDialog = true
     }
   }
 }
