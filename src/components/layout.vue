@@ -5,9 +5,11 @@
         <img src="../assets/logo.png">
         <div class="head-nav">
           <ul class="nav-list">
-            <li @click="logClick">登录</li>
+            <li> {{ name }} </li>
+            <li v-if="name===''" @click="logClick">登录</li>
             <li class="nav-pile">|</li>
-            <li @click="regClick">注册</li>
+            <li v-if="name!==''" @click="quit">退出</li>
+            <li v-if="name===''" @click="regClick">注册</li>
             <li class="nav-pile">|</li>
             <li @click="aboutClick">关于</li>
           </ul>
@@ -24,7 +26,7 @@
        <p>这是我的第一个vue.js框架的demo。我爱vue框架</p>
     </my-dialog>
     <my-dialog :isShow="isShowLogDialog" @on-close ="closeClick">
-       <log-form></log-form>
+       <log-form @has-log="onSuccessLog"></log-form>
     </my-dialog>
     <my-dialog :isShow="isShowRegDialog" @on-close ="closeClick">
        <reg-form></reg-form>
@@ -46,7 +48,8 @@ export default {
     return {
       isShowAboutDialog:false,
       isShowLogDialog:false,
-      isShowRegDialog:false
+      isShowRegDialog:false,
+      name:''
     }
   },
   methods:{
@@ -55,7 +58,7 @@ export default {
     },
     closeClick(){
       this.isShowAboutDialog = false
-      this.isShowLogDialog =false,
+      this.isShowLogDialog =false
       this.isShowRegDialog =false
     },
     regClick(){
@@ -63,6 +66,18 @@ export default {
     },
     logClick(){
       this.isShowLogDialog = true
+    },
+    onSuccessLog(data){
+      this.name=data.username
+      this.isShowLogDialog =false
+    },
+    quit(){
+      this.$http.get('api/login')
+        .then((res) => {
+          this.name=''
+        }, (error) => {
+          console.log(error)
+        })
     }
   }
 }

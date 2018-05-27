@@ -7,7 +7,7 @@
           <input type="text"
           v-model="usernameModel" placeholder="请输入用户名">
         </div>
-        <span class="g-form-error"></span>
+        <span class="g-form-error">{{ userErrors.errorText }}</span>
       </div>
       <div class="g-form-line">
         <span class="g-form-label">密码：</span>
@@ -15,14 +15,14 @@
           <input type="password"
           v-model="passwordModel" placeholder="请输入密码">
         </div>
-        <span class="g-form-error"></span>
+        <span class="g-form-error">{{ passwordErrors.errorText }}</span>
       </div>
       <div class="g-form-line">
         <div class="g-form-btn">
           <a class="button" @click="onLogin">登录</a>
         </div>
       </div>
-      <p></p>
+      <p>{{ errorText }}</p>
     </div>
   </div>
 </template>
@@ -36,6 +36,62 @@ export default {
       errorText: ''
     }
   },
+  computed: {
+    userErrors () {
+      let errorText, status
+      if (!/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/g.test(this.usernameModel)) {
+        status = false
+        errorText = '邮箱格式不正确'
+      }
+      else {
+        status = true
+        errorText = ''
+      }
+      if (!this.userFlag) {
+        errorText = ''
+        this.userFlag = true
+      }
+      return {
+        status,
+        errorText
+      }
+    },
+    passwordErrors () {
+      let errorText, status
+      if (!/^\w{1,6}$/g.test(this.passwordModel)) {
+        status = false
+        errorText = '密码不是1-6位'
+      }
+      else {
+        status = true
+        errorText = ''
+      }
+      if (!this.passwordFlag) {
+        errorText = ''
+        this.passwordFlag = true
+      }
+      return {
+        status,
+        errorText
+      }
+    }
+  },
+  methods: {
+    onLogin () {
+      if (!this.userErrors.status || !this.passwordErrors.status) {
+        this.errorText = '请输入正确信息'
+      }
+      else {
+        this.errorText = ''
+        this.$http.get('api/login')
+        .then((res) => {
+          this.$emit('has-log', res.data)
+        }, (error) => {
+          console.log(error)
+        })
+      }
+    }
+  }
 }
 </script>
 
