@@ -26,9 +26,12 @@
     "userId": 123123
   },
   "getPrice": {
-     "amount":600
+    "amount": 600
   },
   "createOrder": {
+    "orderId": "6djk979"
+  },
+  "checkOrder":{
     "orderId": "6djk979"
   },
   "getOrderList": {

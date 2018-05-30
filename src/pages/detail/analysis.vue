@@ -94,17 +94,21 @@
             <td>{{ buyType.label }}</td>
             <td>{{ period.label }}</td>
             <td>
-              <span v-for="item in versions">{{ item.label }}</span>
+              <span v-for="item in versions">{{ item.label }}&nbsp;</span>
             </td>
             <td>{{ price }}</td>
           </tr>
         </table>
         <h3 class="buy-dialog-title">请选择银行</h3>
-        <bank-chooser></bank-chooser>
-        <div class="button buy-dialog-btn">
+        <bank-chooser @on-change="onChangeBanks"></bank-chooser>
+        <div class="button buy-dialog-btn" @click="confirmBuy">
           确认购买
         </div>
       </my-dialog>
+      <my-dialog :is-show="isShowErrDialog" @on-close="hideErrDialog">
+        支付失败！
+      </my-dialog>
+      <check-order :is-show-check-dialog="isShowCheckOrder" :order-id="orderId" @on-close-check-dialog="hideCheckOrder"></check-order>
   </div>
 </template>
 
@@ -114,6 +118,8 @@ import VSelection from '../../components/base/selection'
 import VCounter from '../../components/base/counter'
 import VChooser from '../../components/base/chooser'
 import VMulChooser from '../../components/base/multiplyChooser'
+import BankChooser from '../../components/bankChooser'
+import CheckOrder from '../../components/checkOrder'
 import _ from 'lodash'
 export default{
     components:{
@@ -122,6 +128,8 @@ export default{
         VCounter,
         VChooser,
         VMulChooser,
+        BankChooser,
+        CheckOrder
     },
     data () {
         return {
@@ -205,6 +213,36 @@ export default{
         hidePayDialog () {
           this.isShowPayDialog = false
         },
+        hideErrDialog () {
+          this.isShowErrDialog = false
+        },
+        hideCheckOrder () {
+          this.isShowCheckOrder = false
+        },
+        onChangeBanks (bankObj) {
+          this.bankId = bankObj.id
+        },
+        confirmBuy () {
+          let buyVersionsArray = _.map(this.versions, (item) => {
+            return item.value
+          })
+          let reqParams = {
+            buyNumber: this.buyNum,
+            buyType: this.buyType.value,
+            period: this.period.value,
+            version: buyVersionsArray.join(','),
+            bankId: this.bankId
+          }
+          this.$http.get('/api/createOrder', reqParams)
+          .then((res) => {
+            this.orderId = res.data.orderId
+            this.isShowCheckOrder = true
+            this.isShowPayDialog = false
+          }, (err) => {
+            this.isShowBuyDialog = false
+            this.isShowErrDialog = true
+          })
+        }
     },
     mounted () {
           this.buyNum = 1
