@@ -54,9 +54,7 @@ export default {
       })
     },
     toOrderList () {
-        this.isShowFailDialog = false
-        this.isShowSuccessDialog = false
-      //this.$router.push({path: '/orderList'})
+      this.$router.push({path: '/orderList'})
     }
   }
 }

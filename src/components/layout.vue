@@ -6,15 +6,16 @@
           <img src="../assets/logo.png">
         </router-link>
         <div class="head-nav">
-          <ul class="nav-list">
-            <li> {{ name }} </li>
-            <li v-if="name===''" @click="logClick">登录</li>
-            <li class="nav-pile">|</li>
-            <li v-if="name!==''" @click="quit">退出</li>
-            <li v-if="name===''" @click="regClick">注册</li>
-            <li class="nav-pile">|</li>
-            <li @click="aboutClick">关于</li>
-          </ul>
+          <keep-alive>
+            <ul class="nav-list">
+              <li> {{ name }} </li>
+              <li v-if="name===''" @click="logClick">登录</li>
+              <li class="nav-pile">|</li>
+              <li v-if="name!==''" @click="quit">退出</li>
+              <li class="nav-pile" v-if="name!==''">|</li>
+              <li @click="aboutClick">关于</li>
+            </ul>
+          </keep-alive>
         </div>
       </div>
     </div>
@@ -39,12 +40,10 @@
 <script>
 import Dialog from './base/dialog'
 import LogForm from './logForm.vue'
-import RegFrom from './regForm.vue'
 export default {
   components:{
     MyDialog:Dialog,
-    LogForm:LogForm,
-    RegFrom:RegFrom
+    LogForm
   },
   data () {
     return {
@@ -62,9 +61,6 @@ export default {
       this.isShowAboutDialog = false
       this.isShowLogDialog =false
       this.isShowRegDialog =false
-    },
-    regClick(){
-      this.isShowRegDialog = true
     },
     logClick(){
       this.isShowLogDialog = true

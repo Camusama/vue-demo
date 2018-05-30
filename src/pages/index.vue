@@ -7,7 +7,7 @@
             <h3>{{ product.title }}</h3>
                 <ul>
                     <li v-for="item in product.list">
-                        <a :href="item.url">{{ item.name }}</a>
+                        <a :href="item.href">{{ item.name }}</a>
                         <span v-if="item.hot" class="hot-tag">HOT</span>
                     </li>
                 </ul>
@@ -18,7 +18,7 @@
         <h2>最新消息</h2>
         <ul>
           <li v-for="item in newsList">
-            <a :href="item.url" class="new-item">{{ item.title }}</a>
+            <a :href="item.href" class="new-item">{{ item.title }}</a>
           </li>
         </ul>
       </div>
@@ -119,20 +119,20 @@ export default {
           list: [
             {
               name: '数据统计',
-              url: 'http://starcraft.com'
+              href: 'detail/analysis'
             },
             {
               name: '数据预测',
-              url: 'http://warcraft.com'
+              href: 'detail/analysis'
             },
             {
               name: '流量分析',
-              url: 'http://overwatch.com',
+              href: 'detail/analysis',
               hot: true
             },
             {
               name: '广告发布',
-              url: 'http://hearstone.com'
+              href: 'detail/analysis'
             }
           ]
         },
@@ -142,20 +142,20 @@ export default {
           list: [
             {
               name: '91助手',
-              url: 'http://weixin.com'
+              href: 'detail/analysis'
             },
             {
               name: '产品助手',
-              url: 'http://twitter.com',
+              href: 'detail/analysis',
               hot: true
             },
             {
               name: '智能地图',
-              url: 'http://maps.com'
+              href: 'detail/analysis'
             },
             {
               name: '团队语音',
-              url: 'http://phone.com'
+              href: 'detail/analysis'
             }
           ]
         }
